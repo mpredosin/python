@@ -43,8 +43,8 @@ def translateRect(rect):
 def translate(x, y):
 
     # translate
-    x = x - offsetX
-    y = y - offsetY
+    x = x + offsetX
+    y = y + offsetY
 
     # scale
     x = x * scaleX
@@ -94,9 +94,9 @@ while running:
         if event.key == pygame.K_d:
             rect.move_ip(1, 0)
         if event.key == pygame.K_UP:
-            offsetY = offsetY + 1
-        if event.key == pygame.K_DOWN:
             offsetY = offsetY - 1
+        if event.key == pygame.K_DOWN:
+            offsetY = offsetY + 1
         if event.key == pygame.K_LEFT:
             offsetX = offsetX + 1
         if event.key == pygame.K_RIGHT:
