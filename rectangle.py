@@ -27,6 +27,7 @@ pygame.display.set_caption("Rectangle")
 font = pygame.font.Font("freesansbold.ttf", 20)
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 
+previousTime = pygame.time.get_ticks()
 
 ################################################################################
 #
@@ -37,6 +38,8 @@ def translateRect(rect):
 
     topleft = translate(rect.left, rect.top)
     newRect = pygame.Rect(topleft, (rect.width * scaleX, rect.height * scaleY))
+
+    #print("translateRect: ", "rect", rect, "newRect", newRect, "scale", scaleX)
     return newRect
 
 
@@ -63,18 +66,22 @@ def translate(x, y):
 #
 ################################################################################
 def render():
-
+    global previousTime
+    ticks = pygame.time.get_ticks()
+    #print("ticks",ticks,"diff",ticks-previousTime)
+    previousTime=ticks
+    
     screen.fill(white)
     pygame.draw.rect(screen, red, translateRect(rect))
-    pygame.draw.circle(screen, black, translate(0, 0), 5)
+    pygame.draw.circle(screen, black, translate(0, 0), int(scaleX))
     pygame.display.update()
-
 
 ################################################################################
 #
 # main loop
 #
 ################################################################################
+scaleMultiplier = 1.1
 running = True
 pygame.key.set_repeat(75, 50)
 while running:
@@ -97,13 +104,21 @@ while running:
             offsetY = offsetY - 1
         if event.key == pygame.K_DOWN:
             offsetY = offsetY + 1
-        if event.key == pygame.K_LEFT:
-            offsetX = offsetX + 1
         if event.key == pygame.K_RIGHT:
             offsetX = offsetX - 1
+        if event.key == pygame.K_LEFT:
+            offsetX = offsetX + 1
+        if event.key == pygame.K_MINUS:
+            scaleX = scaleX / scaleMultiplier
+            scaleY = scaleY / scaleMultiplier
+        if event.key == pygame.K_EQUALS:
+            scaleX = scaleX * scaleMultiplier
+            scaleY = scaleY * scaleMultiplier
         if event.key == pygame.K_r:
-            offsetX = offsetY = 0
             rect = pygame.Rect(-5, 5, 10, 10)
+            offsetX = offsetY = 0
+            scaleX = screenWidth / float(worldWidth)
+            scaleY = screenHeight / float(worldHeight)
 
     render()
 
